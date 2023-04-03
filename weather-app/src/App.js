@@ -67,7 +67,7 @@ function App() {
                     <div className="temp">
                         {data.main
                             ? <h1>{temp.toFixed()} {isCelsius ? '°C' : '°F'}</h1>
-                            : <h1>Search Weather</h1>}
+                            : <h1>Check Weather</h1>}
                     </div>
                     <div className="description">
                         {data.weather
