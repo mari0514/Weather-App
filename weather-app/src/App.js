@@ -15,16 +15,17 @@ function App() {
     const [feelsLikeTemp, setFeelsLikeTemp] = useState(0);
     const [isCelsius, setIsCelsius] = useState(false);
 
-    const API_KEY = 'a25a4a7a74fb4e72c2cf473d6566964f';
-    const URL = `https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${API_KEY}&units=imperial`;
-
     const searchLocation = (event) => {
         if (event.key === 'Enter') {
+            const API_KEY = 'a25a4a7a74fb4e72c2cf473d6566964f';
+            const URL = `https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${API_KEY}&units=imperial`;
+
             axios.get(URL)
             .then((response) => {
                 setData(response.data);
                 setTemp(response.data.main.temp);
                 setFeelsLikeTemp(response.data.main.feels_like);
+                setIsCelsius(false);
                 console.log(response.data);
             })
         }
