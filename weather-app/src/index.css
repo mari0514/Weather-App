@@ -52,11 +52,18 @@ p {
     padding: .8rem 1.6rem;
     font-size: 1.6rem;
     border-radius: 24px;
-    border: 1px solid rgba(255, 255, 255, .8);
     background: rgba(255, 255, 255, .2);
+    border-right: 1px solid rgba(255, 255, 255, .8);
+    border-bottom: 1px solid rgba(255, 255, 255, .8);
     font-family: 'Source Code Pro';
     color: #fff;
+    caret-color: rgb(99, 85, 255);
 }
+
+.app .search input:focus {
+    outline: none;
+}
+
 .app .search .searchIcon {
     position: relative;
     top: -4px;
@@ -84,8 +91,14 @@ p {
     margin: 1rem auto;
     text-align: center;
 }
-.app .top .temp Button {
-    margin: 6px 0 24px;
+.app .top .description Button {
+    margin: 60px auto;
+    cursor: pointer;
+}
+
+.app .top .description Button:hover {
+    border: none;
+    transform: scale(1.1);
 }
 
 .app .bottom {
@@ -97,6 +110,9 @@ p {
     line-height: 3.2rem;
     border-radius: 12px;
     background-color: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(2px);
+    border-right: 1px solid #fff;
+    border-bottom: 1px solid #fff;
 }
 
 .bold {

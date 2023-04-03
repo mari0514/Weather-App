@@ -1,16 +1,21 @@
 import { useState } from 'react';
 import React from 'react'
 import axios from 'axios';
-import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button } from '@chakra-ui/button'
+import { Search2Icon } from '@chakra-ui/icons'
+// import { AddIcon } from '@chakra-ui/icons'
+import { FaTemperatureLow } from 'react-icons/fa';
 
 function App() {
     const [data, setData] = useState({});
     const [location, setLocation] = useState('');
+    const [temp, setTemp] = useState(0);
+    const [feelsLikeTemp, setFeelsLikeTemp] = useState(0);
+    const [isCelsius, setIsCelsius] = useState(false);
 
     const API_KEY = 'a25a4a7a74fb4e72c2cf473d6566964f';
-
     const URL = `https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${API_KEY}&units=imperial`;
 
     const searchLocation = (event) => {
@@ -18,8 +23,24 @@ function App() {
             axios.get(URL)
             .then((response) => {
                 setData(response.data);
+                setTemp(response.data.main.temp);
+                setFeelsLikeTemp(response.data.main.feels_like);
                 console.log(response.data);
             })
+        }
+    }
+
+    // Celsius & Fahrenheit converter
+    const toggleTemperatureUnit = () => {
+        setIsCelsius(!isCelsius);
+        if (isCelsius) {
+            // converting Celsius to Fahrenheit
+            setTemp((temp * 1.8) + 32);
+            setFeelsLikeTemp((feelsLikeTemp * 1.8) + 32);
+        } else {
+            // converting Fahrenheit to Celcius
+            setTemp((temp - 32) / 1.8);
+            setFeelsLikeTemp((feelsLikeTemp - 32) / 1.8);
         }
     }
 
@@ -27,7 +48,8 @@ function App() {
     return (
         <div className="app">
             <div className="search">
-                <FontAwesomeIcon icon={faMagnifyingGlass} className="searchIcon"/>
+                {/* <FontAwesomeIcon icon={faMagnifyingGlass} className="searchIcon"/> */}
+                <Search2Icon className="searchIcon" />
                 <input 
                     value={location}
                     onChange={event => setLocation(event.target.value)}
@@ -44,22 +66,24 @@ function App() {
                     </div>
                     <div className="temp">
                         {data.main
-                            ? <h1>{data.main.temp.toFixed()} °F</h1>
+                            ? <h1>{temp.toFixed()} {isCelsius ? '°C' : '°F'}</h1>
                             : <h1>Search Weather</h1>}
-                        {data.main
-                            ? <Button 
-                                className="converter"
-                                onClick={() => console.log(data.main.temp)}
-                                colorScheme='telegram'
-                                size='lg'>
-                                    Convert to °C
-                                </Button>
-                            : null}
                     </div>
                     <div className="description">
                         {data.weather
                             ? <p>{data.weather[0].description}</p>
                             : null}
+                        {data.main
+                        ? <Button
+                            // leftIcon={<AddIcon />}
+                            leftIcon={<FaTemperatureLow />}
+                            className="converter"
+                            onClick={toggleTemperatureUnit}
+                            colorScheme='teal'
+                            size='lg'>
+                                {isCelsius ? 'in °F' : 'in °C'}
+                            </Button>
+                        : null}
                     </div>
                 </div>
                 {data.name != undefined &&
@@ -67,19 +91,25 @@ function App() {
                         {data.main
                             ? <div className="feels">
                                 <p>Feels Like</p>
-                                <p className="bold">{data.main.feels_like.toFixed()}°F</p>
+                                <p className="bold">
+                                    {feelsLikeTemp.toFixed()} {isCelsius ? '°C' : '°F'}
+                                </p>
                             </div>
                             : null}
                         {data.main
                             ? <div className="humidity">
                                 <p>Humidity</p>
-                                <p className="bold">{data.main.humidity}%</p>                    
+                                <p className="bold">
+                                    {data.main.humidity}%
+                                </p>                    
                             </div>
                             : null}
                         {data.wind
                             ? <div className="wind">
                                 <p>Wind Speed</p>
-                                <p className="bold">{data.wind.speed.toFixed()}MPH</p>
+                                <p className="bold">
+                                    {data.wind.speed.toFixed()}MPH
+                                </p>
                             </div>
                             : null}
                     </div>
